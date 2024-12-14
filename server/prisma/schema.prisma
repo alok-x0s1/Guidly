@@ -6,3 +6,92 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String    @id @default(uuid())
+  username  String    @unique
+  email     String    @unique
+  password  String
+  role      Role      @default(MENTEE)
+  profile   Profile?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  SentNotifications Notification[] @relation("SentNotifications")
+  ReceivedNotifications Notification[] @relation("ReceivedNotifications")
+}
+
+model Profile {
+  id         String       @id @default(uuid())
+  userId     String       @unique
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String
+  bio        String
+  avatar     String?
+  skills     ProfileSkill[]
+  interests  ProfileInterest[]
+  location   String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  senderId  String
+  receiverId String
+  sender    User      @relation("SentNotifications", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver  User      @relation("ReceivedNotifications", fields: [receiverId], references: [id], onDelete: Cascade)
+  message   String
+  type      NotificationType
+  status    NotificationStatus
+  seen      Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Skill {
+  id        String       @id @default(uuid())
+  name      String       @unique
+  profiles  ProfileSkill[]
+}
+
+model Interest {
+  id        String       @id @default(uuid())
+  name      String       @unique
+  profiles  ProfileInterest[]
+}
+
+model ProfileSkill {
+  profileId String
+  skillId   String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([profileId, skillId])
+}
+
+model ProfileInterest {
+  profileId String
+  interestId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  interest  Interest @relation(fields: [interestId], references: [id], onDelete: Cascade)
+
+  @@id([profileId, interestId])
+}
+
+enum Role {
+  MENTOR
+  MENTEE
+  ADMIN
+}
+
+enum NotificationType {
+  REQUEST
+  ACCEPT
+  DECLINE
+}
+
+enum NotificationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
