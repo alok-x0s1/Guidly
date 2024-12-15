@@ -9,7 +9,11 @@ interface UserPayload {
 	username: string;
 }
 
-const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
+export const isLoggedIn = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 	if (!token) {
 		errorResponse(res, 401, "Unauthorized request");
@@ -44,4 +48,30 @@ const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
 	}
 };
 
-export default isLoggedIn;
+export const isAdmin = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const user = req.user;
+		if (!user) {
+			errorResponse(res, 404, "Unauthorized request, please log in");
+			return;
+		}
+
+		if (user.role !== "ADMIN") {
+			errorResponse(
+				res,
+				403,
+				"You are not authorized to access this route"
+			);
+			return;
+		}
+
+		next();
+	} catch (error) {
+		console.log(error);
+		errorResponse(res, 500, "Something went wrong", error);
+	}
+};
