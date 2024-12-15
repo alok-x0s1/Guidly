@@ -12,8 +12,8 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 		if (!validData.success) {
 			errorResponse(
 				res,
-				validData.error.message,
 				400,
+				validData.error.message,
 				validData.error.errors
 			);
 
@@ -28,7 +28,7 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 		});
 
 		if (isUsernameTaken) {
-			errorResponse(res, "This username is already taken", 400);
+			errorResponse(res, 400, "This username is already taken");
 			return;
 		}
 
@@ -39,7 +39,7 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 		});
 
 		if (existingUser) {
-			errorResponse(res, "User is already registered", 400);
+			errorResponse(res, 400, "This email is already registered");
 			return;
 		}
 
@@ -56,15 +56,13 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 		const token = generateToken(user);
 
 		res.cookie("token", token, cookieOptions);
-		successResponse(
-			res,
-			"User registered successfully",
-			{ user: user.id, token },
-			201
-		);
+		successResponse(res, 201, "User registered successfully", {
+			user: user.id,
+			token,
+		});
 	} catch (error) {
 		console.log(error);
-		errorResponse(res, "Something went wrong", 500, error);
+		errorResponse(res, 500, "Something went wrong", error);
 	}
 };
 
@@ -74,8 +72,8 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
 		if (!validData.success) {
 			errorResponse(
 				res,
-				validData.error.message,
 				400,
+				validData.error.message,
 				validData.error.errors
 			);
 
@@ -90,37 +88,37 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
 		});
 
 		if (!user) {
-			errorResponse(res, "User not found", 404);
+			errorResponse(res, 404, "User not found");
 			return;
 		}
 
 		const isPasswordValid = await verifyPassword(password, user.password);
 
 		if (!isPasswordValid) {
-			errorResponse(res, "Invalid credentials", 401);
+			errorResponse(res, 401, "Invalid credentials");
 			return;
 		}
 
 		const token = generateToken(user);
 
 		res.cookie("token", token, cookieOptions);
-		successResponse(res, "User logged in successfully", {
+		successResponse(res, 200, "User logged in successfully", {
 			user: user.id,
 			token,
 		});
 	} catch (error) {
 		console.log(error);
-		errorResponse(res, "Something went wrong", 500, error);
+		errorResponse(res, 500, "Something went wrong", error);
 	}
 };
 
 const logoutUser = async (req: Request, res: Response): Promise<void> => {
 	try {
 		res.clearCookie("token");
-		successResponse(res, "User logged out successfully");
+		successResponse(res, 200, "User logged out successfully");
 	} catch (error) {
 		console.log(error);
-		errorResponse(res, "Something went wrong", 500, error);
+		errorResponse(res, 500, "Something went wrong", error);
 	}
 };
 

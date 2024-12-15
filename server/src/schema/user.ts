@@ -24,6 +24,10 @@ export const updateProfileSchema = z.object({
 	location: z.string().min(3, "Location must be at least 3 characters long"),
 });
 
+export const updateUsernameSchema = z.object({
+	username: z.string().min(3, "Username must be at least 3 characters long"),
+});
+
 export const changePasswordSchema = z.object({
 	oldPassword: z
 		.string()

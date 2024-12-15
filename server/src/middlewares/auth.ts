@@ -12,7 +12,7 @@ interface UserPayload {
 const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
 	const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 	if (!token) {
-		errorResponse(res, "Unauthorized request", 401);
+		errorResponse(res, 401, "Unauthorized request");
 		return;
 	}
 
@@ -22,7 +22,7 @@ const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
 			config.jwt_token_secret
 		) as UserPayload;
 		if (!decoded) {
-			errorResponse(res, "Unauthorized request", 401);
+			errorResponse(res, 401, "Unauthorized request");
 			return;
 		}
 
@@ -32,7 +32,7 @@ const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
 			},
 		});
 		if (!existingUser) {
-			errorResponse(res, "Invalid token, please log in", 401);
+			errorResponse(res, 401, "Invalid token, please log in");
 			return;
 		}
 
@@ -40,6 +40,8 @@ const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
 		next();
 	} catch (error) {
 		console.log(error);
-		errorResponse(res, "Something went wrong", 500, error);
+		errorResponse(res, 500, "Something went wrong", error);
 	}
 };
+
+export default isLoggedIn;
