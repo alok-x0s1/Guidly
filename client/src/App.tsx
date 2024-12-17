@@ -1,10 +1,25 @@
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { About, Explore, Home, Login, SignUp } from "@/pages";
+import { Layout } from "@/components";
 
 function App() {
 	return (
-		<>
-			<h1 className="text-3xl font-bold underline text-center">Guidly</h1>
-		</>
+		<Router>
+			<Routes>
+				<Route path="/" element={<Layout children={<Home />} />} />
+				<Route
+					path="/explore"
+					element={<Layout children={<Explore />} />}
+				/>
+				<Route
+					path="/about"
+					element={<Layout children={<About />} />}
+				/>
+				<Route path="/login" element={<Login />} />
+				<Route path="/signup" element={<SignUp />} />
+			</Routes>
+		</Router>
 	);
 }
 
