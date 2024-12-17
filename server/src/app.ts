@@ -21,6 +21,8 @@ import userRouter from "./routes/user";
 import profileRouter from "./routes/profile";
 import skillsRouter from "./routes/skills";
 import interestsRouter from "./routes/interests";
+import notificationsRouter from "./routes/notifications";
+import mentorshipRouter from "./routes/mentorship";
 
 // Use of all routes
 app.use("/api/auth", authRouter);
@@ -28,6 +30,8 @@ app.use("/api/user", userRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/skills", skillsRouter);
 app.use("/api/interests", interestsRouter);
+app.use("/api/notifications", notificationsRouter);
+app.use("/api/mentorship", mentorshipRouter);
 
 app.get("/api", (req, res) => {
 	res.status(200).json({
