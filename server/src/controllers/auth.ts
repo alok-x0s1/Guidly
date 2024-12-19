@@ -21,6 +21,11 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 		}
 
 		const { username, email, password, role } = validData.data;
+		if (role === "ADMIN") {
+			errorResponse(res, 400, "Admins are not allowed to register");
+			return;
+		}
+
 		const isUsernameTaken = await prisma.user.findUnique({
 			where: {
 				username,

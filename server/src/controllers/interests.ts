@@ -132,4 +132,28 @@ const deleteInterest = async (req: Request, res: Response): Promise<void> => {
 	}
 };
 
-export { getAllInterests, createInterest, updateInterest, deleteInterest };
+const deleteAllInterests = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	try {
+		const interests = await prisma.interest.deleteMany();
+		if (!interests) {
+			errorResponse(res, 404, "Interests not deleted");
+			return;
+		}
+
+		successResponse(res, 200, "Interests deleted successfully", interests);
+	} catch (error) {
+		console.log(error);
+		errorResponse(res, 500, "Something went wrong", error);
+	}
+};
+
+export {
+	getAllInterests,
+	createInterest,
+	updateInterest,
+	deleteInterest,
+	deleteAllInterests,
+};

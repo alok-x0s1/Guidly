@@ -16,7 +16,7 @@ const getUser = async (req: Request, res: Response): Promise<void> => {
 		console.log(error);
 		errorResponse(res, 500, "Something went wrong", error);
 	}
-}
+};
 
 const getUserById = async (req: Request, res: Response): Promise<void> => {
 	try {
@@ -27,7 +27,20 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
 				id: userId,
 			},
 			include: {
-				profile: true,
+				profile: {
+					include: {
+						skills: {
+							include: {
+								skill: true,
+							},
+						},
+						interests: {
+							include: {
+								interest: true,
+							},
+						},
+					},
+				},
 			},
 		});
 		if (!user) {
@@ -43,14 +56,14 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
 };
 
 const updateUsername = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const userId = req.user?.id;
-        if (!userId) {
-            errorResponse(res, 404, "Unauthorized request, please log in");
-            return;
-        }
+	try {
+		const userId = req.user?.id;
+		if (!userId) {
+			errorResponse(res, 404, "Unauthorized request, please log in");
+			return;
+		}
 
-        const validData = updateUsernameSchema.safeParse(req.body);
+		const validData = updateUsernameSchema.safeParse(req.body);
 		if (!validData.success) {
 			errorResponse(
 				res,
@@ -68,9 +81,51 @@ const updateUsername = async (req: Request, res: Response): Promise<void> => {
 			where: {
 				username,
 			},
-		})
-    } catch (error) {
-        console.log(error);
-        errorResponse(res, 500, "Something went wrong", error);
-    }
-}
+		});
+
+		if (existingUser) {
+			errorResponse(res, 400, "Username already exists");
+			return;
+		}
+
+		const user = await prisma.user.update({
+			where: {
+				id: userId,
+			},
+			data: {
+				username,
+			},
+		});
+
+		successResponse(res, 200, "Username updated successfully", {
+			user: user.id,
+			username: user.username,
+		});
+	} catch (error) {
+		console.log(error);
+		errorResponse(res, 500, "Something went wrong", error);
+	}
+};
+
+const deleteUser = async (req: Request, res: Response): Promise<void> => {
+	try {
+		const userId = req.user?.id;
+		if (!userId) {
+			errorResponse(res, 404, "Unauthorized request, please log in");
+			return;
+		}
+
+		await prisma.user.delete({
+			where: {
+				id: userId,
+			},
+		});
+
+		successResponse(res, 200, "User deleted successfully");
+	} catch (error) {
+		console.log(error);
+		errorResponse(res, 500, "Something went wrong", error);
+	}
+};
+
+export { getUser, getUserById, updateUsername, deleteUser };

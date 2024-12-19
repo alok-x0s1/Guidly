@@ -2,6 +2,7 @@ import { Router } from "express";
 import { isAdmin, isLoggedIn } from "../middlewares/auth";
 import {
 	createInterest,
+	deleteAllInterests,
 	deleteInterest,
 	getAllInterests,
 	updateInterest,
@@ -15,5 +16,6 @@ router
 	.route("/:id")
 	.patch(isAdmin, updateInterest)
 	.delete(isAdmin, deleteInterest);
+router.route("/all").delete(isAdmin, deleteAllInterests);
 
 export default router;

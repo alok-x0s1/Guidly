@@ -129,4 +129,19 @@ const deleteSkill = async (req: Request, res: Response): Promise<void> => {
 	}
 };
 
-export { getAllSkills, createSkill, updateSkill, deleteSkill };
+const deleteAllSkills = async (req: Request, res: Response): Promise<void> => {
+	try {
+		const skills = await prisma.skill.deleteMany();
+		if (!skills) {
+			errorResponse(res, 404, "Skills not deleted");
+			return;
+		}
+
+		successResponse(res, 200, "Skills deleted successfully", skills);
+	} catch (error) {
+		console.log(error);
+		errorResponse(res, 500, "Something went wrong", error);
+	}
+};
+
+export { getAllSkills, createSkill, updateSkill, deleteSkill, deleteAllSkills };
