@@ -18,9 +18,23 @@ const getProfile = async (req: Request, res: Response): Promise<void> => {
 				userId: user.id,
 			},
 			include: {
-				user: true,
-				skills: true,
-				interests: true,
+				skills: {
+					include: {
+						skill: true,
+					},
+				},
+				interests: {
+					include: {
+						interest: true,
+					},
+				},
+				user: {
+					select: {
+						email: true,
+						role: true,
+						username: true,
+					},
+				},
 			},
 		});
 
@@ -67,12 +81,20 @@ const createProfile = async (req: Request, res: Response): Promise<void> => {
 			return;
 		}
 
+		const file = req.file;
+		if (!file) {
+			errorResponse(res, 400, "Please upload a profile picture");
+			return;
+		}
+		console.log("File:", file);
+
 		const profile = await prisma.profile.create({
 			data: {
 				name,
 				bio,
 				location,
 				userId,
+				avatar: file.path,
 			},
 		});
 

@@ -11,10 +11,14 @@ import {
 	removeSkills,
 	updateProfile,
 } from "../controllers/profile";
+import upload from "../middlewares/multer";
 
 const router = Router();
 
-router.route("/").get(isLoggedIn, getProfile).post(isLoggedIn, createProfile);
+router
+	.route("/")
+	.get(isLoggedIn, getProfile)
+	.post(isLoggedIn, upload.single("avatar"), createProfile);
 router.route("/:id").get(getProfileById);
 router
 	.route("/:id")
