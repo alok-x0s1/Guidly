@@ -1,17 +1,10 @@
 import { z } from "zod";
 
-export const createSkillsSchema = z.object({
-	name: z.string().toLowerCase(),
+const skillSchema = z.object({
+	name: z.string().trim(),
 });
 
-export const updateSkillsSchema = z.object({
-	name: z.string().toLowerCase(),
-});
-
-export const addSkillsSchema = z.object({
-	name: z.string().toLowerCase(),
-});
-
-export const removeSkillsSchema = z.object({
-	name: z.string().toLowerCase(),
-});
+export const createSkillsSchema = skillSchema;
+export const updateSkillsSchema = skillSchema;
+export const addSkillsSchema = skillSchema;
+export const removeSkillsSchema = skillSchema;
