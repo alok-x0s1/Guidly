@@ -7,7 +7,7 @@ export default function Contact() {
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
 			transition={{ duration: 0.5 }}
-			className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+			className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8"
 		>
 			<div className="sm:mx-auto sm:w-full sm:max-w-md">
 				<motion.h2
@@ -30,7 +30,7 @@ export default function Contact() {
 			</div>
 
 			<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-				<div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+				<div className="bg-gray-50 py-8 px-4 shadow sm:rounded-lg sm:px-10">
 					<motion.p
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}

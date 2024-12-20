@@ -29,7 +29,14 @@ import { AxiosError } from "axios";
 import { ErrorResponse } from "@/types/apiResponse";
 
 const FormSchema = z.object({
-	username: z.string().min(3, "Username must be at least 3 characters long"),
+	username: z
+		.string()
+		.min(3, "Username must be at least 3 characters")
+		.max(20, "Username must be at least 20 characters")
+		.regex(
+			/^[a-zA-Z0-9_]+$/,
+			"Username must not contain special characters"
+		),
 	email: z.string().email("Invalid email address"),
 	password: z.string().min(6, "Password must be at least 6 characters long"),
 	role: z.enum(["MENTOR", "MENTEE"]),
@@ -55,13 +62,12 @@ export default function SignUp() {
 
 		try {
 			const res = await axios.post("/auth/register", data);
-			if (res.data.success) {
-				toast({
-					title: "Success",
-					description: res.data.message,
-				});
-			}
-			form.reset();
+			console.log(res.data);
+
+			toast({
+				title: "Success",
+				description: res.data.message,
+			});
 			navigate("/profile");
 		} catch (error) {
 			const axiosError = error as AxiosError<ErrorResponse>;
