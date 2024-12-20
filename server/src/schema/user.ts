@@ -26,6 +26,24 @@ export const profileSchema = z.object({
 		.max(50, "Name must be at least 50 characters"),
 	bio: z.string().min(20, "Bio must be at least 20 characters long"),
 	location: z.string().min(3, "Location must be at least 3 characters long"),
+	skills: z
+		.string()
+		.transform((value) => JSON.parse(value))
+		.refine(
+			(value) =>
+				Array.isArray(value) &&
+				value.every((item) => typeof item === "string"),
+			"Skills must be a valid array of strings"
+		),
+	interests: z
+		.string()
+		.transform((value) => JSON.parse(value))
+		.refine(
+			(value) =>
+				Array.isArray(value) &&
+				value.every((item) => typeof item === "string"),
+			"Interests must be a valid array of strings"
+		),
 });
 
 export const updateProfileSchema = z.object({

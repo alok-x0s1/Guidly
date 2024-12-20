@@ -6,7 +6,7 @@ import { createSkillsSchema } from "../schema/skills";
 const getAllSkills = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const skills = await prisma.skill.findMany();
-		if (!skills) {
+		if (!skills || skills.length === 0) {
 			errorResponse(res, 404, "Currently there are no skills found");
 			return;
 		}

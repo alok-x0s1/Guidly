@@ -4,6 +4,7 @@ import {
 	acceptRequest,
 	declineRequest,
 	getActiveConnections,
+	getAllMentors,
 	getAllRequests,
 	getMatches,
 	sendRequest,
@@ -12,6 +13,7 @@ import {
 const router = Router();
 
 router.use(isLoggedIn);
+router.route("/").get(getAllMentors);
 router.route("/matches").get(getMatches);
 router.route("/requests").get(getAllRequests);
 router.route("/request").post(sendRequest);

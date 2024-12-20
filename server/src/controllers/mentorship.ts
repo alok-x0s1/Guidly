@@ -242,7 +242,7 @@ const getMatches = async (req: Request, res: Response): Promise<void> => {
 			},
 			include: {
 				user: true,
-			}
+			},
 		});
 
 		if (!matches) {
@@ -257,11 +257,37 @@ const getMatches = async (req: Request, res: Response): Promise<void> => {
 	}
 };
 
+const getAllMentors = async (req: Request, res: Response): Promise<void> => {
+	try {
+		const mentors = await prisma.user.findMany({
+			where: {
+				role: "MENTOR",
+			},
+			select: {
+				id: true,
+				username: true,
+				profile: true,
+			}
+		});
+
+		if (!mentors) {
+			errorResponse(res, 404, "No mentors found");
+			return;
+		}
+
+		successResponse(res, 200, "Mentors fetched successfully", mentors);
+	} catch (error) {
+		console.log(error);
+		errorResponse(res, 500, "Something went wrong", error);
+	}
+};
+
 export {
 	getAllRequests,
 	sendRequest,
 	acceptRequest,
 	declineRequest,
 	getActiveConnections,
-	getMatches
-}
+	getMatches,
+	getAllMentors,
+};

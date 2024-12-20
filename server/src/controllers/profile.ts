@@ -18,22 +18,23 @@ const getProfile = async (req: Request, res: Response): Promise<void> => {
 				userId: user.id,
 			},
 			include: {
-				skills: {
-					include: {
-						skill: true,
-					},
-				},
-				interests: {
-					include: {
-						interest: true,
-					},
-				},
 				user: {
 					select: {
+						id: true,
+						username: true,
 						email: true,
 						role: true,
-						username: true,
 					},
+				},
+				skills: {
+					select: {
+						skill: true,
+					}
+				},
+				interests: {
+					select: {
+						interest: true,
+					}
 				},
 			},
 		});
@@ -69,7 +70,7 @@ const createProfile = async (req: Request, res: Response): Promise<void> => {
 			return;
 		}
 
-		const { name, bio, location } = validData.data;
+		const { name, bio, location, skills, interests } = validData.data;
 
 		const existingProfile = await prisma.profile.findUnique({
 			where: {
@@ -86,7 +87,6 @@ const createProfile = async (req: Request, res: Response): Promise<void> => {
 			errorResponse(res, 400, "Please upload a profile picture");
 			return;
 		}
-		console.log("File:", file);
 
 		const profile = await prisma.profile.create({
 			data: {
@@ -94,8 +94,52 @@ const createProfile = async (req: Request, res: Response): Promise<void> => {
 				bio,
 				location,
 				userId,
-				avatar: file.path,
+				avatar: file.filename,
 			},
+		});
+
+		skills.forEach(async (skill) => {
+			const existingSkill = await prisma.skill.findUnique({
+				where: {
+					name: skill,
+				},
+			});
+
+			if (!existingSkill) {
+				errorResponse(res, 404, "Please only select existing skills");
+				return;
+			}
+
+			await prisma.profileSkill.create({
+				data: {
+					profileId: profile.id,
+					skillId: existingSkill.id,
+				},
+			});
+		});
+
+		interests.forEach(async (interest) => {
+			const existingInterest = await prisma.interest.findUnique({
+				where: {
+					name: interest,
+				},
+			});
+
+			if (!existingInterest) {
+				errorResponse(
+					res,
+					404,
+					"Please only select existing interests"
+				);
+				return;
+			}
+
+			await prisma.profileInterest.create({
+				data: {
+					profileId: profile.id,
+					interestId: existingInterest.id,
+				},
+			});
 		});
 
 		successResponse(res, 201, "Profile created successfully", profile);
