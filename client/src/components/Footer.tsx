@@ -34,7 +34,7 @@ export default function Footer() {
 									</li>
 									<li>
 										<Link
-											to="#"
+											to="/careers"
 											className="text-base text-gray-700 hover:text-indigo-600 duration-300"
 										>
 											Careers
@@ -42,7 +42,7 @@ export default function Footer() {
 									</li>
 									<li>
 										<Link
-											to="#"
+											to="/contact"
 											className="text-base text-gray-700 hover:text-indigo-600 duration-300"
 										>
 											Contact
@@ -57,7 +57,7 @@ export default function Footer() {
 								<ul className="mt-4 space-y-4">
 									<li>
 										<Link
-											to="#"
+											to="/privacy"
 											className="text-base text-gray-700 hover:text-indigo-600 duration-300"
 										>
 											Privacy Policy
@@ -65,7 +65,7 @@ export default function Footer() {
 									</li>
 									<li>
 										<Link
-											to="#"
+											to="/terms"
 											className="text-base text-gray-700 hover:text-indigo-600 duration-300"
 										>
 											Terms of Service
