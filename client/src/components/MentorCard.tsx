@@ -19,6 +19,7 @@ export const MentorCard = ({ mentors }: { mentors: MentorData[] }) => {
 					whileHover={{ y: -5 }}
 					transition={{ duration: 0.3 }}
 					onClick={() => navigate(`/mentor/${mentor.id}`)}
+                    key={mentor.id}
 				>
 					<Card className="overflow-hidden group cursor-pointer bg-card hover:shadow-xl transition-all duration-300">
 						<div className="relative">
@@ -82,7 +83,7 @@ export const MentorCard = ({ mentors }: { mentors: MentorData[] }) => {
 												: mentor.profile.bio}
 										</p>
 
-										<div className="flex items-center gap-4 pt-2 text-xs text-muted-foreground">
+										<div className="flex items-center flex-wrap gap-4 pt-2 text-xs text-muted-foreground">
 											<div className="flex items-center gap-1">
 												<Calendar className="w-3 h-3" />
 												<span>

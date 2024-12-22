@@ -23,8 +23,9 @@ export default function Explore() {
 			const errorMessage = axiosError.response?.data.message;
 
 			toast({
-				title: "Signup failed.",
-				description: errorMessage ?? "An error occurred while signup.",
+				title: "Error",
+				description:
+					errorMessage ?? "An error occurred while getting mentors.",
 				duration: 3000,
 				variant: "destructive",
 			});
