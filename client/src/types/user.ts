@@ -19,7 +19,7 @@ interface User {
 	role: string;
 }
 
-export interface UserProfile {
+export interface ProfileData {
 	id: string;
 	userId: string;
 	name: string;

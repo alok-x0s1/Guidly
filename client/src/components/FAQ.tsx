@@ -4,8 +4,8 @@ import { PlusIcon, MinusIcon } from "lucide-react";
 
 const faqs = [
 	{
-		question: "What is MentorMatch?",
-		answer: "MentorMatch is a platform that connects mentors and mentees in various professional fields, facilitating growth and knowledge sharing.",
+		question: "What is Guidly?",
+		answer: "Guidly is a platform that connects mentors and mentees in various professional fields, facilitating growth and knowledge sharing.",
 	},
 	{
 		question: "How do I sign up?",

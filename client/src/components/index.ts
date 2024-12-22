@@ -11,6 +11,9 @@ import { ProfileData } from "./ProfileData";
 import { MultiSelect } from "./MultiSelect";
 import Loading from "./Loading";
 import { MentorCard } from "./MentorCard";
+import { MentorProfileCard } from "./MentorProfileCard";
+import { AcceptRequest } from "./AcceptRequest";
+import { DeclineRequest } from "./DeclineRequest";
 
 export {
 	Navbar,
@@ -26,4 +29,7 @@ export {
 	MultiSelect,
 	Loading,
 	MentorCard,
+	MentorProfileCard,
+	AcceptRequest,
+	DeclineRequest,
 };

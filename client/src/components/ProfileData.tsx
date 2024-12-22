@@ -10,11 +10,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { SquarePen } from "lucide-react";
 import { DeleteProfile } from "@/components";
-import { UserProfile } from "@/types/user";
+import { ProfileData as UserProfile } from "@/types/user";
+import { motion } from "framer-motion";
 
 export const ProfileData = ({ profile }: { profile: UserProfile }) => {
 	return (
-		<Card>
+		<Card className="min-w-full">
 			<CardHeader>
 				<CardTitle>Your Profile</CardTitle>
 				<CardDescription>
@@ -23,7 +24,14 @@ export const ProfileData = ({ profile }: { profile: UserProfile }) => {
 			</CardHeader>
 			<CardContent>
 				<div className="space-y-4">
-					<div>
+					<motion.div
+						className="w-32 h-32 overflow-hidden border rounded-full hover:shadow-sm"
+						whileHover={{ scale: 1.05 }}
+						transition={{
+							type: "spring",
+							stiffness: 300,
+						}}
+					>
 						<img
 							src={
 								import.meta.env.VITE_API_URL +
@@ -31,9 +39,9 @@ export const ProfileData = ({ profile }: { profile: UserProfile }) => {
 								profile.avatar
 							}
 							alt="user_avatar"
-							className="w-32 h-32 rounded-full"
+							className="w-32 h-32 rounded-full cursor-pointer"
 						/>
-					</div>
+					</motion.div>
 					<div>
 						<Label>Name</Label>
 						<p className="text-lg">

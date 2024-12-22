@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { ErrorResponse } from "@/types/apiResponse";
 import { CreateProfile, Loading, ProfileData } from "@/components";
-import { UserProfile } from "@/types/user";
+import { ProfileData as UserProfile } from "@/types/user";
 
 export default function Profile() {
 	const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -20,11 +20,6 @@ export default function Profile() {
 		try {
 			const response = await axios.get("/profile");
 			setProfile(response.data.data);
-
-			toast({
-				title: "Success",
-				description: response.data.message,
-			});
 		} catch (error) {
 			const axiosError = error as AxiosError<ErrorResponse>;
 			const errorMessage = axiosError.response?.data.message;

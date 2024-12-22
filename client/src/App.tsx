@@ -6,9 +6,12 @@ import {
 	Explore,
 	Home,
 	Login,
+	MentorProfile,
 	NotFound,
+	Notifications,
 	Profile,
 	SignUp,
+	SingleNotification,
 } from "@/pages";
 import { Layout } from "@/components";
 import { Toaster } from "./components/ui/toaster";
@@ -32,6 +35,18 @@ function App() {
 					<Route
 						path="/profile"
 						element={<Layout children={<Profile />} />}
+					/>
+					<Route
+						path="/mentor/:id"
+						element={<Layout children={<MentorProfile />} />}
+					/>
+					<Route
+						path="/notifications"
+						element={<Layout children={<Notifications />} />}
+					/>
+					<Route
+						path="/notifications/:id"
+						element={<Layout children={<SingleNotification />} />}
 					/>
 					<Route
 						path="/contact"

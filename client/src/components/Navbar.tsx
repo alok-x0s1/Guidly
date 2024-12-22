@@ -8,7 +8,7 @@ export default function Navbar() {
 
 	const navItems = [
 		{ name: "About", href: "/about" },
-		{ name: "Explore Mentors", href: "/explore" },
+		{ name: "Mentorship?", href: "/explore" },
 		{ name: "Join Now", href: "/signup" },
 	];
 
@@ -24,7 +24,7 @@ export default function Navbar() {
 							Guidly
 						</Link>
 					</div>
-					<div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+					<div className="hidden sm:ml-6 sm:flex sm:space-x-6">
 						{navItems.map((item) => (
 							<Link
 								key={item.name}
