@@ -4,15 +4,13 @@ import { AxiosError } from "axios";
 import { MentorData } from "@/types/mentor";
 import { ErrorResponse } from "@/types/apiResponse";
 import axios from "@/utils/axios";
-import { useToast } from "@/hooks/use-toast";
-import { Loading, MentorCard } from "@/components";
+import { Error, Loading, MentorCard } from "@/components";
 
 export default function Explore() {
-	const [searchTerm, setSearchTerm] = useState("");
 	const [mentors, setMentors] = useState<MentorData[]>([]);
+	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
 
-	const { toast } = useToast();
 	const getAllMentors = async () => {
 		setLoading(true);
 		try {
@@ -21,14 +19,9 @@ export default function Explore() {
 		} catch (error) {
 			const axiosError = error as AxiosError<ErrorResponse>;
 			const errorMessage = axiosError.response?.data.message;
-
-			toast({
-				title: "Error",
-				description:
-					errorMessage ?? "An error occurred while getting mentors.",
-				duration: 3000,
-				variant: "destructive",
-			});
+			setError(
+				errorMessage ?? "An error occurred while getting mentors."
+			);
 		}
 		setLoading(false);
 	};
@@ -37,9 +30,7 @@ export default function Explore() {
 		getAllMentors();
 	}, []);
 
-	if (loading) {
-		return <Loading placeholder="Searching for mentors..." />;
-	}
+	if (loading) <Loading placeholder="Searching for mentors..." />;
 
 	return (
 		<motion.div
@@ -53,7 +44,11 @@ export default function Explore() {
 					Explore Mentors
 				</h1>
 
-				<MentorCard mentors={mentors} />
+				{error ? (
+					<Error title="Error" error={error} />
+				) : (
+					<MentorCard mentors={mentors} />
+				)}
 			</div>
 		</motion.div>
 	);

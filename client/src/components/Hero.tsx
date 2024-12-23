@@ -38,10 +38,10 @@ export default function Hero() {
 									transition={{ duration: 0.5, delay: 0.6 }}
 								>
 									<Link
-										to="/signup"
+										to="/explore"
 										className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 duration-300 md:py-4 md:text-lg md:px-10"
 									>
-										Get started
+										Explore mentors
 									</Link>
 								</motion.div>
 								<motion.div
@@ -50,10 +50,10 @@ export default function Hero() {
 									transition={{ duration: 0.5, delay: 0.8 }}
 								>
 									<Link
-										to="/explore"
+										to="/dashboard"
 										className="mt-3 w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 duration-300 md:py-4 md:text-lg md:px-10 sm:mt-0 sm:ml-3"
 									>
-										Explore mentors
+										Dashboard
 									</Link>
 								</motion.div>
 							</div>

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
 	About,
 	Contact,
+	Dashboard,
 	Explore,
 	Home,
 	Login,
@@ -51,6 +52,10 @@ function App() {
 					<Route
 						path="/contact"
 						element={<Layout children={<Contact />} />}
+					/>
+					<Route
+						path="/dashboard"
+						element={<Layout children={<Dashboard />} />}
 					/>
 					<Route path="/signin" element={<Login />} />
 					<Route path="/signup" element={<SignUp />} />

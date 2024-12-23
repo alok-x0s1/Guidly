@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MenuIcon, XIcon } from "lucide-react";
+import { Bell, MenuIcon, XIcon } from "lucide-react";
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +34,13 @@ export default function Navbar() {
 								{item.name}
 							</Link>
 						))}
+
+						<Link
+							to="/notifications"
+							className="hover:text-indigo-600 px-2 py-2 rounded-md text-[17px] font-medium duration-300 tracking-tight"
+						>
+							<Bell className="h-6 w-6" />
+						</Link>
 					</div>
 					<div className="-mr-2 flex items-center sm:hidden">
 						<button

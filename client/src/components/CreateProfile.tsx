@@ -170,7 +170,7 @@ export const CreateProfile = ({
 
 	const avatarRef = form.register("avatar", { required: true });
 	return (
-		<Card className="w-1/2">
+		<Card className="w-full p-2 lg:w-[750px]">
 			<CardHeader>
 				<CardTitle>Create Your Profile</CardTitle>
 				<CardDescription>

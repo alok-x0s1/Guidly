@@ -9,6 +9,7 @@ import { Notifications } from "./Notifications";
 import Profile from "./Profile";
 import { SingleNotification } from "./SingleNotification";
 import SignUp from "./Signup";
+import { Dashboard } from "./Dashboard";
 
 export {
 	Home,
@@ -22,4 +23,5 @@ export {
 	MentorProfile,
 	Notifications,
 	SingleNotification,
+	Dashboard,
 };

@@ -1,43 +1,65 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios, { AxiosError } from "axios";
 import { motion } from "framer-motion";
-import { useToast } from "@/hooks/use-toast";
 import { ErrorResponse } from "@/types/apiResponse";
-import { CreateProfile, Loading, ProfileData } from "@/components";
+import { CreateProfile, Error, Loading, ProfileData } from "@/components";
 import { ProfileData as UserProfile } from "@/types/user";
 
 export default function Profile() {
 	const [profile, setProfile] = useState<UserProfile | null>(null);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState<boolean>(true);
+	const [error, setError] = useState<string | null>(null);
 
-	const { toast } = useToast();
+	const fetchProfile = useCallback(async () => {
+		setLoading(true);
+		setError(null);
+
+		try {
+			const response = await axios.get<{ data: UserProfile }>("/profile");
+			setProfile(response.data.data);
+		} catch (err) {
+			const axiosError = err as AxiosError<ErrorResponse>;
+			const errorMessage =
+				axiosError.response?.data.message ||
+				"An error occurred while fetching the profile.";
+			setError(errorMessage);
+		} finally {
+			setLoading(false);
+		}
+	}, []);
 
 	useEffect(() => {
 		fetchProfile();
-	}, []);
-
-	const fetchProfile = async () => {
-		try {
-			const response = await axios.get("/profile");
-			setProfile(response.data.data);
-		} catch (error) {
-			const axiosError = error as AxiosError<ErrorResponse>;
-			const errorMessage = axiosError.response?.data.message;
-
-			toast({
-				title: "Error",
-				description:
-					errorMessage ?? "An error occurred while getting profile.",
-				duration: 3000,
-				variant: "destructive",
-			});
-		}
-		setLoading(false);
-	};
+	}, [fetchProfile]);
 
 	if (loading) {
 		return <Loading placeholder="Loading your mentoring profile..." />;
 	}
+
+	const renderContent = () => {
+		if (error === "Unauthorized request") {
+			return (
+				<Error
+					title="Unauthorized request"
+					error="You are not logged in. Please log in first."
+				/>
+			);
+		}
+
+		if (profile) {
+			return <ProfileData profile={profile} />;
+		}
+
+		return (
+			<div className="flex flex-col items-center">
+				<Error
+					title="Profile not found"
+					error={error || "Profile data is not available."}
+				/>
+				<CreateProfile fetchProfile={fetchProfile} />
+			</div>
+		);
+	};
 
 	return (
 		<motion.div
@@ -46,11 +68,7 @@ export default function Profile() {
 			transition={{ duration: 0.5 }}
 			className="flex justify-center items-center px-4 py-8"
 		>
-			{profile ? (
-				<ProfileData profile={profile} />
-			) : (
-				<CreateProfile fetchProfile={fetchProfile} />
-			)}
+			{renderContent()}
 		</motion.div>
 	);
 }

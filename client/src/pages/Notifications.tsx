@@ -1,11 +1,10 @@
-import { Loading } from "@/components";
+import { Error, Loading } from "@/components";
 import { Card } from "@/components/ui/card";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { useToast } from "@/hooks/use-toast";
 import { ErrorResponse } from "@/types/apiResponse";
 import { Notification } from "@/types/notification";
 import axios from "@/utils/axios";
@@ -18,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 export const Notifications = () => {
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [loading, setLoading] = useState(false);
-	const { toast } = useToast();
+	const [error, setError] = useState<string | null>(null);
 	const navigate = useNavigate();
 
 	const getAllNotifications = async () => {
@@ -31,14 +30,10 @@ export const Notifications = () => {
 			const axiosError = error as AxiosError<ErrorResponse>;
 			const errorMessage = axiosError.response?.data.message;
 
-			toast({
-				title: "Error",
-				description:
-					errorMessage ??
-					"An error occurred while getting notifications.",
-				duration: 3000,
-				variant: "destructive",
-			});
+			if (errorMessage === "Unauthorized request") navigate("/signin");
+			setError(
+				errorMessage ?? "An error occurred while getting notifications."
+			);
 		}
 		setLoading(false);
 	};
@@ -56,7 +51,9 @@ export const Notifications = () => {
 			<h1 className="text-2xl font-bold mb-6">Notifications</h1>
 
 			<div className="space-y-4 flex flex-col items-center">
-				{notifications.length === 0 ? (
+				{error ? (
+					<Error title="Error" error={error} />
+				) : notifications.length === 0 ? (
 					<Card className="p-6 text-center text-muted-foreground">
 						No notifications to display
 					</Card>
