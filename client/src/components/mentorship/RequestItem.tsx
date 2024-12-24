@@ -3,7 +3,7 @@ import { Check, CheckCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { Request } from "@/pages/Dashboard";
+import { Request } from "@/types/dashboard";
 
 const RequestItem = ({
 	request,

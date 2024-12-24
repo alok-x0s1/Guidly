@@ -89,15 +89,22 @@ export default function SignUp() {
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
 			transition={{ duration: 0.5 }}
-			className="min-h-screen bg-gray-50 flex flex-col justify-center py-10 sm:px-6 lg:px-8"
+			className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-10 sm:px-6 lg:px-8"
 		>
-			<div className="sm:mx-auto sm:w-full sm:max-w-md">
-				<h2 className="mt-4 text-center text-3xl font-extrabold text-gray-900">
-					Create your account
-				</h2>
+			<div className="text-center max-w-md">
+				<h1 className="text-4xl font-extrabold tracking-tight">
+					Join{" "}
+					<Link to="/" className="text-indigo-600">
+						Guidly
+					</Link>
+				</h1>
+				<p className="my-2">
+					Create a new account for free and get mentorship with
+					like-minded individuals around the world.
+				</p>
 			</div>
 
-			<div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md mx-2">
+			<div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md mx-2">
 				<div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
 					<Form {...form}>
 						<form

@@ -1,25 +1,5 @@
+import { steps } from "@/utils/data";
 import { motion } from "framer-motion";
-import { UserIcon, SearchIcon, ChartPieIcon } from "lucide-react";
-
-const steps = [
-	{
-		name: "Create your profile",
-		description: "Sign up and create your profile as a mentor or mentee.",
-		icon: UserIcon,
-	},
-	{
-		name: "Find your match",
-		description:
-			"Search for mentors or mentees based on your interests and goals.",
-		icon: SearchIcon,
-	},
-	{
-		name: "Start your journey",
-		description:
-			"Connect with your match and begin your mentorship journey.",
-		icon: ChartPieIcon,
-	},
-];
 
 export default function HowItWorks() {
 	return (

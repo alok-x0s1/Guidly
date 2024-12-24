@@ -24,7 +24,6 @@ export const Notifications = () => {
 		setLoading(true);
 		try {
 			const res = await axios.get("/notifications");
-			console.log(res.data);
 			setNotifications(res.data.data);
 		} catch (error) {
 			const axiosError = error as AxiosError<ErrorResponse>;
@@ -48,7 +47,7 @@ export const Notifications = () => {
 
 	return (
 		<div className="mx-auto min-w-full p-6">
-			<h1 className="text-2xl font-bold mb-6">Notifications</h1>
+			<h1 className="text-3xl font-bold mb-6">Notifications</h1>
 
 			<div className="space-y-4 flex flex-col items-center">
 				{error ? (

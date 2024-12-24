@@ -1,25 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PlusIcon, MinusIcon } from "lucide-react";
-
-const faqs = [
-	{
-		question: "What is Guidly?",
-		answer: "Guidly is a platform that connects mentors and mentees in various professional fields, facilitating growth and knowledge sharing.",
-	},
-	{
-		question: "How do I sign up?",
-		answer: "You can sign up by clicking the 'Get started' button on our homepage and following the registration process. It's quick and easy!",
-	},
-	{
-		question: "Is MentorMatch free to use?",
-		answer: "We offer both free and premium plans. The basic features are free, while advanced features are available in our premium plans.",
-	},
-	{
-		question: "How are mentors vetted?",
-		answer: "We have a thorough vetting process for mentors, including background checks and verification of professional experience.",
-	},
-];
+import { faqs } from "@/utils/data";
 
 export default function FAQ() {
 	const [activeIndex, setActiveIndex] = useState<number | null>(null);

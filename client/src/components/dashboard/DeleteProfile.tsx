@@ -9,9 +9,9 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import axios from "../utils/axios";
+import axios from "@/utils/axios";
 import { AxiosError } from "axios";
 import { ErrorResponse } from "@/types/apiResponse";
 import { useToast } from "@/hooks/use-toast";

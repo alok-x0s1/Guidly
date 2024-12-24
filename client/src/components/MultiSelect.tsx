@@ -15,7 +15,7 @@ import {
 	CommandList,
 } from "./ui/command";
 import { useState } from "react";
-import { ProfileProps } from "./CreateProfile";
+import { ProfileProps } from "./dashboard/CreateProfile";
 
 interface MultiSelectProps {
 	options: ProfileProps[];

@@ -9,7 +9,7 @@ import { Error, Loading, MentorCard } from "@/components";
 export default function Explore() {
 	const [mentors, setMentors] = useState<MentorData[]>([]);
 	const [error, setError] = useState<string | null>(null);
-	const [loading, setLoading] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(true);
 
 	const getAllMentors = async () => {
 		setLoading(true);
@@ -30,22 +30,24 @@ export default function Explore() {
 		getAllMentors();
 	}, []);
 
-	if (loading) <Loading placeholder="Searching for mentors..." />;
+	if (loading || mentors.length === 0) {
+		return <Loading placeholder="Loading mentors..." />;
+	}
 
 	return (
 		<motion.div
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
 			transition={{ duration: 0.5 }}
-			className="min-h-screen py-12 px-4 sm:px-6 lg:px-8"
+			className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 min-w-full"
 		>
-			<div className="max-w-7xl mx-auto">
+			<div className="max-w-full mx-auto">
 				<h1 className="text-3xl font-extrabold text-gray-900 mb-8">
 					Explore Mentors
 				</h1>
 
 				{error ? (
-					<Error title="Error" error={error} />
+					<Error title="Error in getting mentors" error={error} />
 				) : (
 					<MentorCard mentors={mentors} />
 				)}

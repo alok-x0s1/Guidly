@@ -7,6 +7,8 @@ interface ErrorDisplayProps {
 }
 
 export default function Error({ error, title }: ErrorDisplayProps) {
+	const isUnauthorized = error === "Unauthorized request";
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: -20 }}
@@ -24,10 +26,14 @@ export default function Error({ error, title }: ErrorDisplayProps) {
 				</div>
 				<div className="ml-3">
 					<h3 className="text-lg font-medium text-red-800">
-						{title}
+						{isUnauthorized ? "Unauthorized Request" : title}
 					</h3>
 					<div className="mt-2 text-base text-red-700">
-						<p>{error}</p>
+						<p>
+							{isUnauthorized
+								? "You are not logged in. Please log in first."
+								: error}
+						</p>
 					</div>
 				</div>
 			</div>
