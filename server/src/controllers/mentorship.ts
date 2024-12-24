@@ -11,6 +11,17 @@ const sendRequest = async (req: Request, res: Response): Promise<void> => {
 			return;
 		}
 
+		const userProfile = await prisma.profile.findUnique({
+			where: {
+				userId: userId,
+			},
+		});
+
+		if (!userProfile) {
+			errorResponse(res, 404, "Please set up your profile first");
+			return;
+		}
+
 		const validData = createNotificationSchema.safeParse(req.body);
 		if (!validData.success) {
 			errorResponse(
@@ -31,6 +42,18 @@ const sendRequest = async (req: Request, res: Response): Promise<void> => {
 
 		if (!existingRecipient) {
 			errorResponse(res, 404, "Mentor not found");
+			return;
+		}
+
+		const existingNotification = await prisma.notification.findFirst({
+			where: {
+				receiverId,
+				senderId: userId,
+			},
+		});
+
+		if (existingNotification) {
+			errorResponse(res, 400, "You have already sent a request");
 			return;
 		}
 
@@ -76,7 +99,7 @@ const getAllRequests = async (req: Request, res: Response): Promise<void> => {
 		});
 
 		if (!requests) {
-			errorResponse(res, 404, "No requests found");
+			errorResponse(res, 404, "You haven't sent any requests yet");
 			return;
 		}
 
@@ -96,6 +119,7 @@ const acceptRequest = async (req: Request, res: Response): Promise<void> => {
 			},
 			data: {
 				status: "ACCEPTED",
+				seen: true,
 			},
 		});
 
@@ -125,6 +149,7 @@ const declineRequest = async (req: Request, res: Response): Promise<void> => {
 			},
 			data: {
 				status: "DECLINED",
+				seen: true,
 			},
 		});
 
@@ -162,6 +187,36 @@ const getActiveConnections = async (
 				type: "REQUEST",
 				status: "ACCEPTED",
 			},
+			include: {
+				sender: {
+					select: {
+						id: true,
+						username: true,
+						role: true,
+
+						profile: {
+							select: {
+								name: true,
+								avatar: true,
+							},
+						}
+					},
+				},
+				receiver: {
+					select: {
+						id: true,
+						username: true,
+						role: true,
+
+						profile: {
+							select: {
+								name: true,
+								avatar: true,
+							},
+						}
+					},
+				},
+			},
 		});
 
 		if (!connections) {
@@ -169,11 +224,16 @@ const getActiveConnections = async (
 			return;
 		}
 
+		const connectionsWithIsSender = connections.map((connection) => ({
+			...connection,
+			isSender: connection.senderId === userId,
+		}));
+
 		successResponse(
 			res,
 			200,
 			"Active connections fetched successfully",
-			connections
+			connectionsWithIsSender
 		);
 	} catch (error) {
 		console.log(error);
@@ -267,7 +327,7 @@ const getAllMentors = async (req: Request, res: Response): Promise<void> => {
 				id: true,
 				username: true,
 				profile: true,
-			}
+			},
 		});
 
 		if (!mentors) {
@@ -282,6 +342,136 @@ const getAllMentors = async (req: Request, res: Response): Promise<void> => {
 	}
 };
 
+const getMentorById = async (req: Request, res: Response): Promise<void> => {
+	try {
+		const mentorId = req.params.id;
+		const mentor = await prisma.profile.findUnique({
+			where: {
+				userId: mentorId,
+			},
+			include: {
+				user: {
+					select: {
+						id: true,
+						username: true,
+						role: true,
+					},
+				},
+				skills: {
+					select: {
+						skill: true,
+					},
+				},
+				interests: {
+					select: {
+						interest: true,
+					},
+				},
+			},
+		});
+
+		if (!mentor || mentor.user.role !== "MENTOR") {
+			errorResponse(res, 404, "Mentor not found or not a mentor");
+			return;
+		}
+
+		successResponse(res, 200, "Mentor fetched successfully", mentor);
+	} catch (error) {
+		console.log(error);
+		errorResponse(res, 500, "Something went wrong", error);
+	}
+};
+
+const getAllSentRequests = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	try {
+		const userId = req.user?.id;
+		if (!userId) {
+			errorResponse(res, 404, "Unauthorized request, please log in");
+			return;
+		}
+
+		const requests = await prisma.notification.findMany({
+			where: {
+				senderId: userId,
+			},
+			include: {
+				receiver: {
+					select: {
+						id: true,
+						username: true,
+						role: true,
+
+						profile: {
+							select: {
+								name: true,
+								avatar: true,
+							}
+						}
+					},
+				}
+			}
+		});
+
+		if (!requests) {
+			errorResponse(res, 404, "You haven't sent any requests yet");
+			return;
+		}
+
+		successResponse(res, 200, "Requests fetched successfully", requests);
+	} catch (error) {
+		console.log(error);
+		errorResponse(res, 500, "Something went wrong", error);
+	}
+};
+
+const getAllReceivedRequests = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	try {
+		const userId = req.user?.id;
+		if (!userId) {
+			errorResponse(res, 404, "Unauthorized request, please log in");
+			return;
+		}
+
+		const requests = await prisma.notification.findMany({
+			where: {
+				receiverId: userId,
+			},
+			include: {
+				sender: {
+					select: {
+						id: true,
+						username: true,
+						role: true,
+
+						profile: {
+							select: {
+								name: true,
+								avatar: true,
+							}
+						}
+					},
+				}
+			}
+		});
+
+		if (!requests) {
+			errorResponse(res, 404, "You haven't received any requests yet");
+			return;
+		}
+
+		successResponse(res, 200, "Requests fetched successfully", requests);
+	} catch (error) {
+		console.log(error);
+		errorResponse(res, 500, "Something went wrong", error);
+	}
+};
+
 export {
 	getAllRequests,
 	sendRequest,
@@ -290,4 +480,7 @@ export {
 	getActiveConnections,
 	getMatches,
 	getAllMentors,
+	getMentorById,
+	getAllSentRequests,
+	getAllReceivedRequests,
 };

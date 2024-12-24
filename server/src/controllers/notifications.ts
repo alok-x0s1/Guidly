@@ -3,7 +3,10 @@ import { errorResponse, successResponse } from "../utils/response";
 import prisma from "../config/prisma";
 import { createNotificationSchema } from "../schema/notifications";
 
-const getAllNotifications = async (req: Request, res: Response):Promise<void> => {
+const getAllNotifications = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	try {
 		const userId = req.user?.id;
 		if (!userId) {
@@ -13,7 +16,7 @@ const getAllNotifications = async (req: Request, res: Response):Promise<void> =>
 
 		const notifications = await prisma.notification.findMany({
 			where: {
-				receiverId: userId,
+				OR: [{ senderId: userId }, { receiverId: userId }],
 			},
 		});
 
@@ -22,11 +25,16 @@ const getAllNotifications = async (req: Request, res: Response):Promise<void> =>
 			return;
 		}
 
+		const notificationsWithIsSender = notifications.map((notification) => ({
+			...notification,
+			isSender: notification.senderId === userId,
+		}));
+
 		successResponse(
 			res,
 			200,
 			"Notifications fetched successfully",
-			notifications
+			notificationsWithIsSender
 		);
 	} catch (error) {
 		console.log(error);
@@ -34,7 +42,10 @@ const getAllNotifications = async (req: Request, res: Response):Promise<void> =>
 	}
 };
 
-const createNotification = async (req: Request, res: Response):Promise<void> => {
+const createNotification = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	try {
 		const userId = req.user?.id;
 		if (!userId) {
@@ -62,7 +73,7 @@ const createNotification = async (req: Request, res: Response):Promise<void> => 
 			},
 		});
 
-		if (!existingRecipient) {
+		if (!existingRecipient || existingRecipient.role !== "MENTOR") {
 			errorResponse(res, 404, "Mentor not found");
 			return;
 		}
@@ -75,7 +86,7 @@ const createNotification = async (req: Request, res: Response):Promise<void> => 
 		});
 
 		if (existingNotification) {
-			errorResponse(res, 400, "Notification already exists");
+			errorResponse(res, 400, "You have already sent a request");
 			return;
 		}
 
@@ -101,7 +112,10 @@ const createNotification = async (req: Request, res: Response):Promise<void> => 
 	}
 };
 
-const getNotificationById = async (req: Request, res: Response):Promise<void> => {
+const getNotificationById = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	try {
 		const userId = req.user?.id;
 		if (!userId) {
@@ -116,7 +130,55 @@ const getNotificationById = async (req: Request, res: Response):Promise<void> =>
 				id: notificationId,
 			},
 			include: {
-				sender: true,
+				sender: {
+					select: {
+						id: true,
+						username: true,
+						role: true,
+
+						profile: {
+							select: {
+								skills: {
+									select: {
+										skill: true,
+									},
+								},
+								interests: {
+									select: {
+										interest: true,
+									},
+								},
+								name: true,
+								avatar: true,
+							},
+						},
+					},
+				},
+
+				receiver: {
+					select: {
+						id: true,
+						username: true,
+						role: true,
+
+						profile: {
+							select: {
+								skills: {
+									select: {
+										skill: true,
+									},
+								},
+								interests: {
+									select: {
+										interest: true,
+									},
+								},
+								name: true,
+								avatar: true,
+							},
+						},
+					},
+				},
 			},
 		});
 
@@ -125,11 +187,16 @@ const getNotificationById = async (req: Request, res: Response):Promise<void> =>
 			return;
 		}
 
+		const notificationWithIsSender = {
+			...notification,
+			isSender: notification.senderId === userId,
+		};
+
 		successResponse(
 			res,
 			200,
 			"Notification fetched successfully",
-			notification
+			notificationWithIsSender
 		);
 	} catch (error) {
 		console.log(error);
@@ -137,7 +204,10 @@ const getNotificationById = async (req: Request, res: Response):Promise<void> =>
 	}
 };
 
-const markNotificationAsRead = async (req: Request, res: Response):Promise<void> => {
+const markNotificationAsRead = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	try {
 		const userId = req.user?.id;
 		if (!userId) {

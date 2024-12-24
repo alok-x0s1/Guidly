@@ -14,7 +14,7 @@ app.use(
 );
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
-app.use('/public', express.static(path.join(__dirname, '../public')));
+app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cookieParser());
 
 // Import of all routes
