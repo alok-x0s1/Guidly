@@ -4,8 +4,9 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc",
-    "start": "node dist/server.js"
+    "build": "tsc && prisma generate",
+    "prisma:generate": "prisma generate",
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
