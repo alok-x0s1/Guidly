@@ -26,12 +26,45 @@ import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
 import { MultiSelect } from "@/components/MultiSelect";
-import { CreateProfileSchema } from "@/schema/user";
 
 export interface ProfileProps {
 	id: string;
 	name: string;
 }
+
+const FormSchema = z.object({
+	name: z
+		.string()
+		.min(3, "Name must be at least 3 characters long")
+		.max(50, "Name must be at least 50 characters"),
+	bio: z
+		.string()
+		.min(20, "Bio must be at least 20 characters long")
+		.max(500, "Bio must be at most 500 characters long"),
+	location: z
+		.string()
+		.min(3, "Location must be at least 3 characters long")
+		.max(50, "Location must be at most 50 characters long"),
+	skills: z
+		.array(z.string())
+		.min(1, "Select at least one skill")
+		.max(15, "You can select up to 15 skills"),
+	interests: z
+		.array(z.string())
+		.min(1, "Select at least one interest")
+		.max(5, "You can select up to 5 interests"),
+	avatar: z
+		.instanceof(FileList)
+		.refine((file) => file?.length == 1, "File is required.")
+		.refine(
+			(file) =>
+				file[0]?.type === "image/png" ||
+				file[0]?.type === "image/jpeg" ||
+				file[0]?.type === "image/jpg",
+			"Must be a png, jpeg or jpg."
+		)
+		.refine((file) => file[0]?.size <= 5000000, `Max file size is 5MB.`),
+});
 
 export const CreateProfile = ({
 	fetchProfile,
@@ -83,8 +116,8 @@ export const CreateProfile = ({
 		availableInterests();
 	}, []);
 
-	const form = useForm<z.infer<typeof CreateProfileSchema>>({
-		resolver: zodResolver(CreateProfileSchema),
+	const form = useForm<z.infer<typeof FormSchema>>({
+		resolver: zodResolver(FormSchema),
 		defaultValues: {
 			name: "",
 			bio: "",
@@ -95,7 +128,7 @@ export const CreateProfile = ({
 		},
 	});
 
-	const onSubmit = async (data: z.infer<typeof CreateProfileSchema>) => {
+	const onSubmit = async (data: z.infer<typeof FormSchema>) => {
 		setLoading(true);
 
 		try {
