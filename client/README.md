@@ -11,8 +11,6 @@ Welcome to the frontend repository for **Guidly**, a mentorship matching platfor
 -   **State Management**: Efficient state handling for smooth navigation.
 -   **APIs Integration**: Seamless communication with the backend.
 
----
-
 ## Tech Stack
 
 -   **Vite**: Fast and modern frontend build tool.
@@ -20,8 +18,6 @@ Welcome to the frontend repository for **Guidly**, a mentorship matching platfor
 -   **Tailwind CSS**: Utility-first CSS framework for styling.
 -   **Framer Motion**: Declarative animations and transitions.
 -   **shadcn**: Styled and reusable UI components.
-
----
 
 ## Installation
 
@@ -65,16 +61,12 @@ Welcome to the frontend repository for **Guidly**, a mentorship matching platfor
     npm run build
     ```
 
----
-
 ## Scripts
 
 -   **`npm run dev`**: Start the development server.
 -   **`npm run build`**: Build the application for production.
 -   **`npm run preview`**: Preview the production build.
 -   **`npm run lint`**: Lint TypeScript files.
-
----
 
 ## Contributing
 
@@ -83,8 +75,6 @@ Welcome to the frontend repository for **Guidly**, a mentorship matching platfor
 3. Commit your changes (`git commit -m 'Add new feature'`).
 4. Push to the branch (`git push origin feature-name`).
 5. Open a pull request.
-
----
 
 ## Acknowledgements
 

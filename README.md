@@ -2,6 +2,52 @@
 
 Welcome to **Guidly**, a platform designed to connect mentors and mentees based on skills and interests. This repository contains both the backend and frontend components of the application.
 
+Live Demo: [guidly.vercel.app](https://guidly.vercel.app)
+
+## Overview
+
+Guidly is a platform that allows users to create profiles, find mentorship connections, and stay updated on mentorship requests and updates.
+
+1. Home page: Welcome message and navigation links.
+
+    ![Home Page](./client/public/home.png)
+
+2. About page: Learn more about Guidly and its features.
+
+    ![About Page](./client/public/about.png)
+
+3. Profile page: Delete or update user profiles with roles (mentor/mentee), skills, and interests.
+
+    ![Profile Page](./client/public/profile.png)
+
+4. Mentorship page: Find mentorship connections based on shared skills and interests.
+
+    ![Mentorship Page](./client/public/mentorship.png)
+
+## For Mentee
+
+1. Notifications page: Stay updated on mentorship requests and updates.
+
+    ![Notifications Page](./client/public/notification_mentee.png)
+
+2. Dashboard page: View sent and received mentorship requests.
+
+    ![Dashboard Page](./client/public/dashboard_mentee.png)
+
+## For Mentor
+
+1. Notifications page: Stay updated on mentorship requests and updates.
+
+    ![Notifications Page](./client/public/notification_mentor.png)
+
+2. Dashboard page: View sent and received mentorship requests.
+
+    ![Dashboard Page](./client/public/dashboard_mentor.png)
+
+3. Notification details page: View details of a specific notification and accept or reject the request.
+
+    ![Notification Details Page](./client/public/notification_detail.png)
+
 ## Features
 
 ### General Features
