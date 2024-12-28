@@ -10,12 +10,11 @@ import {
 
 const router = Router();
 
-router.use(isLoggedIn);
-router.route("/").get(getAllInterests).post(isAdmin, createInterest);
-router
-	.route("/:id")
-	.patch(isAdmin, updateInterest)
-	.delete(isAdmin, deleteInterest);
-router.route("/all").delete(isAdmin, deleteAllInterests);
+router.route("/").get(getAllInterests);
+router.use(isLoggedIn, isLoggedIn);
+
+router.route("/").post(createInterest);
+router.route("/:id").patch(updateInterest).delete(deleteInterest);
+router.route("/all").delete(deleteAllInterests);
 
 export default router;

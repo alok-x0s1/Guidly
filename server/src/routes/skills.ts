@@ -10,9 +10,11 @@ import {
 
 const router = Router();
 
-router.use(isLoggedIn);
-router.route("/").get(getAllSkills).post(isAdmin, createSkill);
-router.route("/:id").patch(isAdmin, updateSkill).delete(isAdmin, deleteSkill);
-router.route("/all").delete(isAdmin, deleteAllSkills);
+router.route("/").get(getAllSkills);
+router.use(isLoggedIn, isAdmin);
+
+router.route("/").post(createSkill);
+router.route("/:id").patch(updateSkill).delete(deleteSkill);
+router.route("/all").delete(deleteAllSkills);
 
 export default router;
