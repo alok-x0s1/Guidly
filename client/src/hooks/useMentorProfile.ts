@@ -15,7 +15,7 @@ export const useMentorProfile = (id: string | undefined) => {
 		const fetchMentorProfile = async () => {
 			setLoading(true);
 			try {
-				const res = await axios.get(`/mentorship/${id}`);
+				const res = await axios.get(`/mentorship/mentor/${id}`);
 				setMentor(res.data.data);
 			} catch (err) {
 				const axiosError = err as AxiosError<ErrorResponse>;

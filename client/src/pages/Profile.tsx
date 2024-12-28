@@ -37,14 +37,8 @@ export default function Profile() {
 	}
 
 	const renderContent = () => {
-		if (error === "Unauthorized request") {
-			return (
-				<Error
-					title="Unauthorized request"
-					error="You are not logged in. Please log in first."
-				/>
-			);
-		}
+		if (error === "Unauthorized request, Please login")
+			return <Error title="Error" error={error} redirect />;
 
 		if (profile) {
 			return <ProfileData profile={profile} />;

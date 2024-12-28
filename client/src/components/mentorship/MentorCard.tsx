@@ -19,7 +19,7 @@ export const MentorCard = ({ mentors }: { mentors: MentorData[] }) => {
 					whileHover={{ y: -5 }}
 					transition={{ duration: 0.3 }}
 					onClick={() => navigate(`/mentor/${mentor.id}`)}
-                    key={mentor.id}
+					key={mentor.id}
 				>
 					<Card className="overflow-hidden group cursor-pointer bg-card hover:shadow-xl transition-all duration-300">
 						<div className="relative">

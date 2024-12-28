@@ -159,7 +159,7 @@ export const CreateProfile = ({
 			toast({
 				title: "Error",
 				description:
-					errorMessage ?? "An error occurred while getting profile.",
+					errorMessage ?? "An error occurred while creating profile.",
 				duration: 3000,
 				variant: "destructive",
 			});

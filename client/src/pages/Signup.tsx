@@ -62,7 +62,6 @@ export default function SignUp() {
 
 		try {
 			const res = await axios.post("/auth/register", data);
-			console.log(res.data);
 
 			toast({
 				title: "Success",

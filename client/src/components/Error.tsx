@@ -1,13 +1,27 @@
 import { motion } from "framer-motion";
 import { XCircle } from "lucide-react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ErrorDisplayProps {
 	title: string;
 	error: string;
+	redirect?: boolean;
 }
 
-export default function Error({ error, title }: ErrorDisplayProps) {
-	const isUnauthorized = error === "Unauthorized request";
+export default function Error({
+	error,
+	title,
+	redirect = false,
+}: ErrorDisplayProps) {
+	const isUnauthorized = error === "Unauthorized request, Please login";
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (isUnauthorized && redirect) {
+			navigate("/signin", { replace: true });
+		}
+	}, [isUnauthorized, redirect, navigate]);
 
 	return (
 		<motion.div
