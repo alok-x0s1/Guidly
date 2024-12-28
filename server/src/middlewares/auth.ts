@@ -16,7 +16,7 @@ export const isLoggedIn = async (
 ) => {
 	const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 	if (!token) {
-		errorResponse(res, 401, "Unauthorized request");
+		errorResponse(res, 401, "Unauthorized request, Please login");
 		return;
 	}
 
