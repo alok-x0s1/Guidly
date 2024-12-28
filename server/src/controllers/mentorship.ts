@@ -199,7 +199,7 @@ const getActiveConnections = async (
 								name: true,
 								avatar: true,
 							},
-						}
+						},
 					},
 				},
 				receiver: {
@@ -213,7 +213,7 @@ const getActiveConnections = async (
 								name: true,
 								avatar: true,
 							},
-						}
+						},
 					},
 				},
 			},
@@ -335,7 +335,16 @@ const getAllMentors = async (req: Request, res: Response): Promise<void> => {
 			return;
 		}
 
-		successResponse(res, 200, "Mentors fetched successfully", mentors);
+		const mentorsWithProfile = mentors.filter(
+			(mentor) => mentor.profile && mentor
+		);
+
+		successResponse(
+			res,
+			200,
+			"Mentors fetched successfully",
+			mentorsWithProfile
+		);
 	} catch (error) {
 		console.log(error);
 		errorResponse(res, 500, "Something went wrong", error);
@@ -408,11 +417,11 @@ const getAllSentRequests = async (
 							select: {
 								name: true,
 								avatar: true,
-							}
-						}
+							},
+						},
 					},
-				}
-			}
+				},
+			},
 		});
 
 		if (!requests) {
@@ -453,11 +462,11 @@ const getAllReceivedRequests = async (
 							select: {
 								name: true,
 								avatar: true,
-							}
-						}
+							},
+						},
 					},
-				}
-			}
+				},
+			},
 		});
 
 		if (!requests) {
