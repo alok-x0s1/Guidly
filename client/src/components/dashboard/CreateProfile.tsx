@@ -53,17 +53,6 @@ const FormSchema = z.object({
 		.array(z.string())
 		.min(1, "Select at least one interest")
 		.max(5, "You can select up to 5 interests"),
-	avatar: z
-		.instanceof(FileList)
-		.refine((file) => file?.length == 1, "File is required.")
-		.refine(
-			(file) =>
-				file[0]?.type === "image/png" ||
-				file[0]?.type === "image/jpeg" ||
-				file[0]?.type === "image/jpg",
-			"Must be a png, jpeg or jpg."
-		)
-		.refine((file) => file[0]?.size <= 5000000, `Max file size is 5MB.`),
 });
 
 export const CreateProfile = ({
@@ -124,7 +113,6 @@ export const CreateProfile = ({
 			location: "",
 			skills: [],
 			interests: [],
-			avatar: undefined,
 		},
 	});
 
@@ -138,13 +126,8 @@ export const CreateProfile = ({
 			formData.append("location", data.location);
 			formData.append("skills", JSON.stringify(data.skills));
 			formData.append("interests", JSON.stringify(data.interests));
-			formData.append("avatar", data.avatar[0]);
 
-			const response = await axios.post("/profile", formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			});
+			const response = await axios.post("/profile", data);
 
 			toast({
 				title: "Success",
@@ -168,7 +151,6 @@ export const CreateProfile = ({
 		}
 	};
 
-	const avatarRef = form.register("avatar", { required: true });
 	return (
 		<Card className="w-full p-2 lg:w-[750px]">
 			<CardHeader>
@@ -267,25 +249,6 @@ export const CreateProfile = ({
 											selected={field.value}
 											onChange={field.onChange}
 											placeholder="Select interests..."
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name="avatar"
-							render={() => (
-								<FormItem>
-									<FormLabel>Avatar</FormLabel>
-									<FormControl>
-										<Input
-											type="file"
-											{...avatarRef}
-											className="file:text-indigo-700 file:bg-indigo-100 file:border-indigo-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:cursor-pointer h-fit"
-											accept="image/png, image/jpeg, image/jpg"
 										/>
 									</FormControl>
 									<FormMessage />

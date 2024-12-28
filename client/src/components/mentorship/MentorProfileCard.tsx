@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { ProfileData as UserProfile } from "@/types/user";
 import { motion } from "framer-motion";
 import { SendMentorshipRequest } from "./SendMentorshipRequest";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const MentorProfileCard = ({ mentor }: { mentor: UserProfile }) => {
 	return (
@@ -30,15 +31,30 @@ export const MentorProfileCard = ({ mentor }: { mentor: UserProfile }) => {
 							stiffness: 300,
 						}}
 					>
-						<img
-							src={
-								import.meta.env.VITE_API_URL +
-								"/public/uploads/" +
-								mentor.avatar
-							}
-							alt="user_avatar"
-							className="w-32 h-32 rounded-full cursor-pointer"
-						/>
+						<Avatar className="h-32 w-32">
+							{mentor.avatar ? (
+								<AvatarImage
+									src={
+										import.meta.env.VITE_API_URL +
+										"/public/uploads/" +
+										mentor.avatar
+									}
+									alt={mentor.name || mentor.user.username}
+									onError={(e) => {
+										(
+											e.target as HTMLImageElement
+										).style.display = "none";
+									}}
+								/>
+							) : (
+								<AvatarFallback className="text-2xl">
+									{mentor.name
+										.split(" ")
+										.map((n) => n[0])
+										.join("")}
+								</AvatarFallback>
+							)}
+						</Avatar>
 					</motion.div>
 					<div>
 						<Label>Name</Label>

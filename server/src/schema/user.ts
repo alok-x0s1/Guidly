@@ -27,23 +27,9 @@ export const profileSchema = z.object({
 	bio: z.string().min(20, "Bio must be at least 20 characters long"),
 	location: z.string().min(3, "Location must be at least 3 characters long"),
 	skills: z
-		.string()
-		.transform((value) => JSON.parse(value))
-		.refine(
-			(value) =>
-				Array.isArray(value) &&
-				value.every((item) => typeof item === "string"),
-			"Skills must be a valid array of strings"
-		),
+		.array(z.string()),
 	interests: z
-		.string()
-		.transform((value) => JSON.parse(value))
-		.refine(
-			(value) =>
-				Array.isArray(value) &&
-				value.every((item) => typeof item === "string"),
-			"Interests must be a valid array of strings"
-		),
+		.array(z.string())
 });
 
 export const updateProfileSchema = z.object({

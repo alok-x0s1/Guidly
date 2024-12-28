@@ -12,6 +12,7 @@ import { SquarePen } from "lucide-react";
 import { DeleteProfile } from "@/components";
 import { ProfileData as UserProfile } from "@/types/user";
 import { motion } from "framer-motion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const ProfileData = ({ profile }: { profile: UserProfile }) => {
 	return (
@@ -32,15 +33,30 @@ export const ProfileData = ({ profile }: { profile: UserProfile }) => {
 							stiffness: 300,
 						}}
 					>
-						<img
-							src={
-								import.meta.env.VITE_API_URL +
-								"/public/uploads/" +
-								profile.avatar
-							}
-							alt="user_avatar"
-							className="w-32 h-32 rounded-full cursor-pointer"
-						/>
+						<Avatar className="h-32 w-32">
+							{profile.avatar ? (
+								<AvatarImage
+									src={
+										import.meta.env.VITE_API_URL +
+										"/public/uploads/" +
+										profile.avatar
+									}
+									alt={profile.name || profile.user.username}
+									onError={(e) => {
+										(
+											e.target as HTMLImageElement
+										).style.display = "none";
+									}}
+								/>
+							) : (
+								<AvatarFallback className="text-2xl">
+									{profile.name
+										.split(" ")
+										.map((n) => n[0])
+										.join("")}
+								</AvatarFallback>
+							)}
+						</Avatar>
 					</motion.div>
 					<div>
 						<Label>Name</Label>

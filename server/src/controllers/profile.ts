@@ -4,8 +4,6 @@ import prisma from "../config/prisma";
 import { profileSchema, updateProfileSchema } from "../schema/user";
 import { addSkillsSchema, removeSkillsSchema } from "../schema/skills";
 import { addInterestsSchema, removeInterestsSchema } from "../schema/interests";
-import fs from "node:fs";
-import path from "node:path";
 
 const getProfile = async (req: Request, res: Response): Promise<void> => {
 	try {
@@ -84,19 +82,12 @@ const createProfile = async (req: Request, res: Response): Promise<void> => {
 			return;
 		}
 
-		const file = req.file;
-		if (!file) {
-			errorResponse(res, 400, "Please upload a profile picture");
-			return;
-		}
-
 		const profile = await prisma.profile.create({
 			data: {
 				name,
 				bio,
 				location,
 				userId,
-				avatar: file.filename,
 			},
 		});
 
@@ -278,20 +269,6 @@ const deleteProfile = async (req: Request, res: Response): Promise<void> => {
 				id: profileId,
 			},
 		});
-
-		if (profile.avatar) {
-			const avatarPath = path.join(
-				__dirname,
-				"../../public/uploads",
-				profile.avatar
-			);
-
-			fs.unlink(avatarPath, (err) => {
-				if (err && err.code !== "ENOENT") {
-					console.error(`Failed to delete avatar: ${err.message}`);
-				}
-			});
-		}
 
 		successResponse(res, 200, "Profile deleted successfully");
 	} catch (error) {

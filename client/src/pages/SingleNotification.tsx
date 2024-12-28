@@ -18,7 +18,6 @@ export const SingleNotification = () => {
 		setLoading(true);
 		try {
 			const res = await axios.get("/notifications/" + id);
-			console.log(res.data.data);
 			setNotification(res.data.data);
 		} catch (error) {
 			console.log(error);

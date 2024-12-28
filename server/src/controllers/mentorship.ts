@@ -37,11 +37,12 @@ const sendRequest = async (req: Request, res: Response): Promise<void> => {
 		const existingRecipient = await prisma.user.findUnique({
 			where: {
 				id: receiverId,
+				role: "MENTOR",
 			},
 		});
 
 		if (!existingRecipient) {
-			errorResponse(res, 404, "Mentor not found");
+			errorResponse(res, 404, "Mentor not found, or not a mentor");
 			return;
 		}
 
@@ -51,6 +52,11 @@ const sendRequest = async (req: Request, res: Response): Promise<void> => {
 				senderId: userId,
 			},
 		});
+
+		if (existingRecipient.id === userId) {
+			errorResponse(res, 400, "You cannot send a request to yourself");
+			return;
+		}
 
 		if (existingNotification) {
 			errorResponse(res, 400, "You have already sent a request");
