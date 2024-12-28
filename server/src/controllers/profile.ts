@@ -4,6 +4,8 @@ import prisma from "../config/prisma";
 import { profileSchema, updateProfileSchema } from "../schema/user";
 import { addSkillsSchema, removeSkillsSchema } from "../schema/skills";
 import { addInterestsSchema, removeInterestsSchema } from "../schema/interests";
+import fs from "node:fs";
+import path from "node:path";
 
 const getProfile = async (req: Request, res: Response): Promise<void> => {
 	try {
@@ -29,12 +31,12 @@ const getProfile = async (req: Request, res: Response): Promise<void> => {
 				skills: {
 					select: {
 						skill: true,
-					}
+					},
 				},
 				interests: {
 					select: {
 						interest: true,
-					}
+					},
 				},
 			},
 		});
@@ -276,6 +278,20 @@ const deleteProfile = async (req: Request, res: Response): Promise<void> => {
 				id: profileId,
 			},
 		});
+
+		if (profile.avatar) {
+			const avatarPath = path.join(
+				__dirname,
+				"../../public/uploads",
+				profile.avatar
+			);
+
+			fs.unlink(avatarPath, (err) => {
+				if (err && err.code !== "ENOENT") {
+					console.error(`Failed to delete avatar: ${err.message}`);
+				}
+			});
+		}
 
 		successResponse(res, 200, "Profile deleted successfully");
 	} catch (error) {
