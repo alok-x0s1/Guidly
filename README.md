@@ -4,6 +4,16 @@ Welcome to **Guidly**, a platform designed to connect mentors and mentees based 
 
 Live Demo: [guidly.vercel.app](https://guidly.vercel.app)
 
+```sh
+## For Mentee
+Email: test@mentee.com
+Password: test1234
+
+## For Mentor
+Email: test@mentor.com
+Password: test1234
+```
+
 ## Overview
 
 Guidly is a platform that allows users to create profiles, find mentorship connections, and stay updated on mentorship requests and updates.
@@ -157,3 +167,4 @@ Refer to the [backend README](/server/README.md) for detailed API documentation.
 3. Commit your changes (`git commit -m 'Add new feature'`).
 4. Push to the branch (`git push origin feature-name`).
 5. Open a pull request.
+````
