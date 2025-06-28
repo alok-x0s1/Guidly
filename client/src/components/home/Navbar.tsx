@@ -9,7 +9,7 @@ export default function Navbar() {
 	const navItems = [
 		{ name: "About", href: "/about" },
 		{ name: "Mentorship?", href: "/explore" },
-		{ name: "Join Now", href: "/signup" },
+		{ name: "Join Now", href: "/signin" },
 	];
 
 	return (

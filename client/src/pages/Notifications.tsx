@@ -49,7 +49,7 @@ export const Notifications = () => {
 		<div className="mx-auto min-w-full p-6">
 			<h1 className="text-3xl font-bold mb-6">Notifications</h1>
 
-			<div className="space-y-4 flex flex-col items-center">
+			<div className="space-y-4 flex flex-col items-start">
 				{error ? (
 					<Error title="Error" error={error} />
 				) : notifications.length === 0 ? (
